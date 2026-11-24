@@ -1,0 +1,7 @@
+langchain
+langchain-chroma
+langchain_google_genai
+langchain-text-splitters
+requests
+rich
+python-dotenv
