@@ -6,6 +6,7 @@ from langchain.messages import HumanMessage
 from langgraph.checkpoint.memory import InMemorySaver
 from tools.order_status_tools import get_order_status
 from tools.plant_search_tools import search_plants_by_price, search_plants_by_name
+from plant_search_rag.plant_search_rag import plant_rag_query
 
 # read .env
 load_dotenv()
@@ -25,7 +26,7 @@ If the user asks for assistance about anything that you can't access about our s
 # create front-facing agent
 agent = create_agent(
     model = LLM_MODEL,
-    tools = [ get_order_status, search_plants_by_price, search_plants_by_name ],
+    tools = [ get_order_status, search_plants_by_price, search_plants_by_name, plant_rag_query ],
     system_prompt = agent_system_prompt,
 
     # save conversations in memory, referenced by a thread id
