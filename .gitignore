@@ -3,4 +3,4 @@
 __pycache__
 *.pyc
 plant_search_rag/plants.json
-plant_search_rag/plant_embeddings
+**/*_embeddings/*
