@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 from langchain.agents import create_agent
 from langchain.messages import HumanMessage
+from langgraph.checkpoint.memory import InMemorySaver
 from tools.order_status_tools import get_order_status
 
 # read .env
@@ -24,28 +25,34 @@ If the user asks for assistance about anything that you can't access about our s
 agent = create_agent(
     model = LLM_MODEL,
     tools = [ get_order_status ],
-    system_prompt = agent_system_prompt
+    system_prompt = agent_system_prompt,
+
+    # save conversations in memory, referenced by a thread id
+    checkpointer = InMemorySaver()
 )
 
 # create a text respones for an input message
-def generate_response(user_message: str):
+def generate_response(user_message: str, thread_id: str) -> str:
     human_message = HumanMessage(user_message)
 
     # query the llm
     response = agent.invoke({
         "messages": [ human_message ]
+    }, {
+        # the thread is is used to distinguish conversation contexts
+        "configurable": {
+            "thread_id": thread_id
+        }
     })
 
     messages = response["messages"]
-
-    for message in messages:
-        print(message.pretty_repr())
 
     # get last message (the llm response)
     ai_message = messages[-1]
     ai_message_text = ai_message.text
 
-    print(ai_message_text)
+    return ai_message_text
 
 if __name__ == "__main__":
-    generate_response(input("Enter query - "))
+    thread_id = "testing"
+    generate_response(input("Enter query - "), thread_id)
