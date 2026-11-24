@@ -49,6 +49,9 @@ def generate_response(user_message: str, thread_id: str) -> str:
 
     messages = response["messages"]
 
+    for message in messages:
+        print(message.pretty_repr())
+
     # get last message (the llm response)
     ai_message = messages[-1]
     ai_message_text = ai_message.text
