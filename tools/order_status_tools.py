@@ -24,7 +24,7 @@ def get_order_status(order_id: int) -> dict:
     response = requests.get(url)
 
     # error handling / response
-    if response.status_code > 299:
+    if response.status_code >= 300:
         return { "error": "Error calling status API" }
     else:
         return response.json()
